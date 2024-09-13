@@ -227,10 +227,10 @@ func (mb *client) readArea(area int, dbNumber int, start int, amount int, wordLe
 		address = address >> 8
 		request.Data[28] = byte(address & 0x0FF)
 
-		// TEST!!!
-		binary.BigEndian.PutUint16(request.Data[11:], mb.requestSequence)
-		log.Printf("--->requestSequence=%d", mb.requestSequence)
-		mb.requestSequence += 1
+		// // TEST!!!
+		// binary.BigEndian.PutUint16(request.Data[11:], mb.requestSequence)
+		// log.Printf("--->requestSequence=%d", mb.requestSequence)
+		// mb.requestSequence += 1
 
     	var response *ProtocolDataUnit
 		response, sendError := mb.send(&request)
@@ -474,6 +474,12 @@ func (mb *client) Read(variable string, buffer []byte) (value interface{}, err e
 
 //send the package of a pdu request and a pdu response, check for response error and verify the package
 func (mb *client) send(request *ProtocolDataUnit) (response *ProtocolDataUnit, err error) {
+
+	// TEST!!!
+	binary.BigEndian.PutUint16(request.Data[11:], mb.requestSequence)
+	log.Printf("--->requestSequence=%d", mb.requestSequence)
+	mb.requestSequence += 1
+
 	dataResponse, err := mb.transporter.Send(request.Data)
 	if err != nil {
 		return
@@ -482,7 +488,7 @@ func (mb *client) send(request *ProtocolDataUnit) (response *ProtocolDataUnit, e
 	if err = mb.packager.Verify(request.Data, dataResponse); err != nil {
 		return
 	}
-	if dataResponse == nil || len(dataResponse) == 0 {
+	if len(dataResponse) == 0 {
 		// Empty response
 		err = fmt.Errorf("s7: response data is empty")
 		return
