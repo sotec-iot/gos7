@@ -6,6 +6,7 @@ package gos7
 import (
 	"encoding/binary"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -227,7 +228,8 @@ func (mb *client) readArea(area int, dbNumber int, start int, amount int, wordLe
 		request.Data[28] = byte(address & 0x0FF)
 
 		// TEST!!!
-		binary.BigEndian.PutUint16(request.Data[:], mb.requestSequence)
+		binary.BigEndian.PutUint16(request.Data[11:], mb.requestSequence)
+		log.Printf("--->requestSequence=%d", mb.requestSequence)
 		mb.requestSequence += 1
 
     	var response *ProtocolDataUnit
