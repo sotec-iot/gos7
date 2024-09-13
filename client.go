@@ -59,6 +59,7 @@ type ClientHandler interface {
 type client struct {
 	packager    Packager
 	transporter Transporter
+	requestSequence uint16
 }
 
 // NewClient creates a new s7 client with given backend handler.
@@ -224,7 +225,12 @@ func (mb *client) readArea(area int, dbNumber int, start int, amount int, wordLe
 		request.Data[29] = byte(address & 0x0FF)
 		address = address >> 8
 		request.Data[28] = byte(address & 0x0FF)
-    var response *ProtocolDataUnit
+
+		// TEST!!!
+		binary.BigEndian.PutUint16(request.Data[:], mb.requestSequence)
+		mb.requestSequence += 1
+
+    	var response *ProtocolDataUnit
 		response, sendError := mb.send(&request)
 		err = sendError
 
