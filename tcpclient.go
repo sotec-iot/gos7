@@ -330,6 +330,7 @@ func (mb *tcpPackager) Verify(request []byte, response []byte) (err error) {
 	var responseSequence uint16 = binary.BigEndian.Uint16(response[11:])
 	
 	// log request/reponseSequence (only debug)
+	// TODO: remove after Test
 	log.Printf("s7: request sequence: %d, response sequence: %d", requestSequence, responseSequence)
 	if (responseSequence != requestSequence) {
 		// log error
