@@ -331,7 +331,9 @@ func (mb *tcpPackager) Verify(request []byte, response []byte) (err error) {
 	
 	// log request/reponseSequence (only debug)
 	// TODO: remove after Test
-	log.Printf("s7: request sequence: %d, response sequence: %d", requestSequence, responseSequence)
+	if (requestSequence % 500 == 0) {
+		log.Printf("s7: request sequence: %d, response sequence: %d", requestSequence, responseSequence)
+	}
 	if (responseSequence != requestSequence) {
 		// log error
 		err = fmt.Errorf(
