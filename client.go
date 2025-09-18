@@ -6,7 +6,6 @@ package gos7
 import (
 	"encoding/binary"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 )
